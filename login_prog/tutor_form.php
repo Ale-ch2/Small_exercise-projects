@@ -13,6 +13,7 @@ if ($result->num_rows > 0) {
     $_SESSION["nome_utente"] = $nome_utente;
     header('Location: successfull.php');
     exit(); //Perchè exit in questo modo? cos'è?
+    //uscita forzata dal programma
 } else {
     header('Location: unsuccessfull.htm');
     exit();
