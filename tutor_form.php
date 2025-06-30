@@ -11,9 +11,9 @@ $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
     $_SESSION["nome_utente"] = $nome_utente;
-    header('Location: ../html/successfull.php');
+    header('Location: successfull.php');
     exit(); //Perchè exit in questo modo? cos'è?
 } else {
-    header('Location: ../html/unsuccessfull.htm');
+    header('Location: unsuccessfull.htm');
     exit();
 }

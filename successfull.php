@@ -8,7 +8,7 @@
 <body>
     <?php 
     session_start();
-    include "../php/connection.php";
+    include "connection.php";
     $nome_utente = $_SESSION['nome_utente'];
     echo "<br>";
     echo $nome_utente;
