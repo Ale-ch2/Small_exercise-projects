@@ -1,20 +1,28 @@
 <?php
-$nome_utente = $_POST['nome_utente'];
-$pwd = $_POST['pwd'];
+    //starting SESSION before using session-data or outputting anything
+    session_start(); 
+    include "connection.php";
 
-session_start();
-include "connection.php";
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    //turn every special character into his equivalent HTML entity
+    //SANITIZE INPUT
+    $nome_utente = htmlspecialchars($_POST['nome_utente']); 
+    $pwd = htmlspecialchars($_POST['pwd']);
 
-$sql = "SELECT nome_utente, pwd FROM utenti WHERE nome_utente = '$nome_utente'  AND pwd =  '$pwd'"; // chiedere riguardo a questa linea e a proposito di sanificare i dati
+    //prepare SQL to avoit injections
+    $stmt = $conn->prepare("SELECT nome_utente, pwd FROM utenti WHERE nome_utente = ? AND pwd = ?");
+    $stmt->bind_param("ss", $nome_utente, $pwd);
+    $stmt->execute();
 
-$result = $conn->query($sql);
+    $result = $stmt->get_result();
 
-if ($result->num_rows > 0) {
-    $_SESSION["nome_utente"] = $nome_utente;
-    header('Location: successfull.php');
-    exit(); //Perchè exit in questo modo? cos'è?
-    //uscita forzata dal programma
-} else {
-    header('Location: unsuccessfull.htm');
-    exit();
+    if ($result->num_rows > 0) {
+        $_SESSION["nome_utente"] = $nome_utente;
+        $_SESSION["pwd"] = $pwd;
+        header('Location: successfull.php');
+        exit(); //exit() ferma lo script, chiude il programma, molto simile a "die"
+    } else {
+        header('Location: unsuccessfull.htm');
+        exit();
+    }
 }

@@ -9,10 +9,18 @@
     <?php 
     session_start();
     include "connection.php";
-    $nome_utente = $_SESSION['nome_utente'];
-    echo "<br>";
-    echo $nome_utente;
-    
+
+    $stmt = $conn->prepare("SELECT nome_utente, pwd FROM utenti WHERE nome_utente = ? AND pwd = ?");
+    $stmt->bind_param("ss", $_SESSION["nome_utente"], $_SESSION["pwd"]);
+    $stmt->execute();
+
+    $result = $stmt->get_result();
+
+    if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            echo "<br>" . "Nome utente: " . $_SESSION["nome_utente"] . "<br>" . "Password: " . $_SESSION["pwd"] ;
+        }
+    } 
     ?>
 </body>
 </html>
